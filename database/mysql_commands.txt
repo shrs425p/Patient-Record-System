@@ -4,6 +4,7 @@
        Tables: patient, doctor, appointment, medical_record
 ================================================================================
 
+python -c "from werkzeug.security import generate_password_hash; import mysql.connector as m; c=m.connect(host='localhost',user='root',password='shrs',database='patient_record_system'); cur=c.cursor(); cur.execute('UPDATE users SET password_hash=%s WHERE username=%s',(generate_password_hash('NewPassword123'),'admin')); c.commit(); print('password updated'); cur.close(); c.close()"
 
 --------------------------------------------------------------------------------
 1. DATABASE COMMANDS

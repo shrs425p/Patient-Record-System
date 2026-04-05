@@ -4,7 +4,8 @@ A modular Flask + MySQL web application to manage patients, doctors, appointment
 
 ## Features
 
-- Authentication (admin login)
+- Authentication with DB-backed users table
+- Change Password UI for logged-in users
 - Dashboard with summary cards and upcoming appointments
 - Patient management (add, list, edit, delete, profile)
 - Doctor management (add, list, edit, delete)
@@ -56,6 +57,14 @@ source database/schema.sql
 
 If source is not supported in your MySQL shell, copy and run the SQL statements from database/schema.sql manually.
 
+The schema includes these tables:
+
+- users
+- patient
+- doctor
+- appointment
+- medical_record
+
 ## Configure Database Connection
 
 Database settings are read from environment variables in backend/db.py.
@@ -66,6 +75,16 @@ Supported variables:
 - DB_USER
 - DB_PASSWORD
 - DB_NAME
+
+Optional auth/bootstrap variables:
+
+- DEFAULT_ADMIN_USER
+- DEFAULT_ADMIN_PASSWORD
+
+Optional app variables:
+
+- FLASK_SECRET_KEY
+- FLASK_DEBUG
 
 Defaults (if variables are not set):
 
@@ -96,6 +115,11 @@ Default login:
 - username: admin
 - password: password
 
+Note:
+
+- Passwords are stored as hashes in `users.password_hash`.
+- You can change password from the sidebar using `Change Password`.
+
 ## Seed / Reset Demo Data
 
 To clear and insert fresh sample data:
@@ -108,6 +132,8 @@ Current seed targets include 30+ rows across major sections:
 - doctors
 - appointments
 - medical records
+
+`users` table is not reset by the reseed script.
 
 ## Useful SQL Reference
 
@@ -123,6 +149,12 @@ Request flow:
 2. Route validates input and delegates to backend/services
 3. Service executes MySQL queries through backend/db.py
 4. Route renders frontend templates with response data
+
+Authentication flow:
+
+1. Login route validates credentials via backend/auth.py
+2. Credentials are checked against `users` table using password hash verification
+3. Session stores `logged_in`, `user_id`, and `username`
 
 This keeps app.py small and presentation-friendly while business logic stays modular.
 

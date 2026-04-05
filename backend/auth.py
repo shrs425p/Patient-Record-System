@@ -78,3 +78,31 @@ def authenticate_user(username, password):
             cursor.close()
         if conn and conn.is_connected():
             conn.close()
+
+
+def change_user_password(user_id, current_password, new_password):
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT id, password_hash FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+        if not user:
+            return False, "User not found."
+
+        if not check_password_hash(user["password_hash"], current_password):
+            return False, "Current password is incorrect."
+
+        cursor.execute(
+            "UPDATE users SET password_hash = %s WHERE id = %s",
+            (generate_password_hash(new_password), user_id),
+        )
+        conn.commit()
+        return True, "Password updated successfully."
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
