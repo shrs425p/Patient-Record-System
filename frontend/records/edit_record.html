@@ -1,0 +1,30 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='records/records.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Edit Medical Record: #{{ record.id }}</h1>
+    <div class="clean-panel form-container">
+        <form class="form" method="POST">
+            <label>Appointment</label>
+            <select name="appointment_id" required>
+                {% for a in appointments %}
+                <option value="{{ a.id }}" {% if record.appointment_id == a.id %}selected{% endif %}>ID: {{ a.id }} - {{ a.patient_name }} ({{ a.date }})</option>
+                {% endfor %}
+            </select>
+
+            <label>Diagnosis</label>
+            <input type="text" name="diagnosis" value="{{ record.diagnosis }}" required>
+
+            <label>Prescription</label>
+            <textarea name="prescription" rows="4">{{ record.prescription or '' }}</textarea>
+
+            <button class="btn" type="submit">Update Record</button>
+            <a href="{{ url_for('records') }}" class="btn secondary" style="width:100%; margin-top: 10px; text-align:center; display:block;">Cancel</a>
+        </form>
+    </div>
+</section>
+{% endblock %}

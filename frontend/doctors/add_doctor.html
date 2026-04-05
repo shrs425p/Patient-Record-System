@@ -1,0 +1,31 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='doctors/doctors.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Add Doctor</h1>
+    <div class="clean-panel form-container">
+        <form class="form" method="POST">
+            <label>Name</label>
+            <input type="text" name="name" required>
+
+            <label>Specialty</label>
+            <input type="text" name="specialty" required>
+
+            <label>Phone</label>
+            <input type="text" name="phone">
+
+            <label>Email</label>
+            <input type="email" name="email">
+
+            <label>Description / About Doctor</label>
+            <textarea name="description" rows="3" placeholder="Enter background, clinical interests, qualifications, or other notes..."></textarea>
+
+            <button class="btn" type="submit">Save Doctor</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

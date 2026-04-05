@@ -1,0 +1,120 @@
+/* records.css */
+.search-panel {
+    margin-bottom: 18px;
+    padding: 18px 24px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+}
+
+.search-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+.search-form input {
+    flex: 1;
+    max-width: 420px;
+    margin: 0;
+}
+
+/* Collapsible Add Record */
+.add-record-details {
+    margin-bottom: 18px;
+    padding: 18px 24px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
+}
+
+.add-record-details summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    list-style: none;
+    padding: 6px 0;
+    letter-spacing: 0.01em;
+    transition: color 0.2s ease;
+}
+
+.add-record-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.add-record-details summary::after {
+    content: '+';
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.add-record-details summary:hover {
+    color: var(--ink);
+}
+
+.add-record-details summary:hover::after {
+    background: var(--bg-app);
+    color: var(--ink);
+}
+
+.add-record-details[open] summary {
+    margin-bottom: 10px;
+}
+
+.add-record-details[open] summary::after {
+    content: '-';
+    transform: rotate(180deg);
+    background: var(--brand-light);
+    border-color: var(--brand-light);
+    color: var(--ink);
+}
+
+.add-record-details .form {
+    max-width: 680px;
+    margin-top: 6px;
+}
+
+.add-record-details .form input,
+.add-record-details .form textarea,
+.add-record-details .form select {
+    background: #fff;
+}
+
+.add-record-details .form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.add-record-details .form .btn {
+    margin-top: 6px;
+}
+
+.form-container {
+    max-width: 680px;
+    margin: 16px auto 0;
+}
+
+@media (max-width: 768px) {
+    .search-panel,
+    .add-record-details {
+        padding: 14px 16px;
+    }
+
+    .search-form input {
+        max-width: 100%;
+    }
+}

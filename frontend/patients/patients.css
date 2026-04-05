@@ -1,0 +1,26 @@
+/* patients.css */
+.form-container {
+	max-width: 680px;
+	margin: 16px auto 0;
+}
+
+.badge-link {
+	font-weight: 600;
+}
+
+td:nth-child(6),
+td:nth-child(7) {
+	max-width: 220px;
+	white-space: normal;
+	word-break: break-word;
+}
+
+.col-action .action-buttons {
+	white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+	.table-wrapper {
+		overflow-x: auto;
+	}
+}

@@ -1,0 +1,21 @@
+/* doctors.css */
+.form-container {
+	max-width: 680px;
+	margin: 16px auto 0;
+}
+
+td:nth-child(6) {
+	max-width: 360px;
+	white-space: normal;
+	word-break: break-word;
+}
+
+.action-buttons {
+	white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+	.table-wrapper {
+		overflow-x: auto;
+	}
+}

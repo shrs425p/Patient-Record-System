@@ -1,0 +1,50 @@
+/* login.css */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px); /* Account for navbar and padding */
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 32px;
+}
+
+.back-home-btn {
+    margin-bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-header h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.login-header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--ink-mute);
+}
+
+.login-card .form button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 12px;
+    font-size: 1rem;
+}

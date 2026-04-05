@@ -1,0 +1,31 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-wrapper">
+    <div class="clean-panel login-card">
+        <a href="{{ url_for('landing') }}" class="btn outline sm back-home-btn">Back to Home</a>
+
+        <div class="login-header">
+            <h2>Sign In</h2>
+            <p>Enter your credentials to access the system.</p>
+        </div>
+        
+        <form class="form" method="POST" action="{{ url_for('login') }}">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="admin" required autofocus>
+            
+            <label>Password</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+            
+            <button class="btn" type="submit">Sign In</button>
+        </form>
+        <div class="login-footer">
+            <p><small>Default credentials: admin / password</small></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

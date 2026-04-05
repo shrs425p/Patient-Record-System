@@ -1,0 +1,57 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='landing/landing.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='landing/landing.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <p class="kicker">Clinic Management Made Simple</p>
+        <h1>Patient Record System</h1>
+        <p class="hero-text">
+            Manage patients, doctors, appointments, and medical records securely.
+            Built for quick daily hospital and clinic workflows.
+        </p>
+        <div class="hero-actions">
+            {% if session.get('logged_in') %}
+            <a class="btn" href="{{ url_for('dashboard') }}">Open Dashboard</a>
+            <a class="btn secondary" href="{{ url_for('patients') }}">View Patients</a>
+            {% else %}
+            <a class="btn" href="{{ url_for('login') }}">Access System (Sign In)</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-panel">
+        <h3>System Capabilities</h3>
+        <ul>
+            <li>Add and track patient demographic details</li>
+            <li>Maintain an active directory of specialized doctors</li>
+            <li>Book, view, and manage appointments in seconds</li>
+            <li>Store immutable medical records and diagnosis</li>
+        </ul>
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article class="feature-card">
+        <h3>Patient Directory</h3>
+        <p>Quickly register new patients and search records seamlessly without switching context.</p>
+        <a href="{{ url_for('patients') }}">Go to Patients</a>
+    </article>
+    <article class="feature-card">
+        <h3>Doctor Desk</h3>
+        <p>Maintain precise doctor profiles with contact and specialization information.</p>
+        <a href="{{ url_for('doctors') }}">Go to Doctors</a>
+    </article>
+    <article class="feature-card">
+        <h3>Appointments</h3>
+        <p>Schedule visits and track daily consultations linked to detailed patient-doctor history.</p>
+        <a href="{{ url_for('appointments') }}">Go to Appointments</a>
+    </article>
+</section>
+{% endblock %}

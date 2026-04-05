@@ -1,0 +1,86 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dashboard.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='dashboard/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="header-row">
+        <h1>Dashboard Overview</h1>
+        <div class="date-badge">{{ stats.today_full }}</div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon patient-icon"></div>
+            <div class="stat-info">
+                <h3>Total Patients</h3>
+                <p class="stat-number">{{ counts.patients }}</p>
+                <span class="stat-trend">Overall database</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon doctor-icon"></div>
+            <div class="stat-info">
+                <h3>Total Doctors</h3>
+                <p class="stat-number">{{ counts.doctors }}</p>
+                <span class="stat-trend">In medical team</span>
+            </div>
+        </div>
+        <div class="stat-card primary">
+            <div class="stat-icon appointment-icon"></div>
+            <div class="stat-info">
+                <h3>Today's Appointments</h3>
+                <p class="stat-number">{{ appointment_today_count }}</p>
+                <span class="stat-trend">Next 24 hours</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon record-icon"></div>
+            <div class="stat-info">
+                <h3>Medical Records</h3>
+                <p class="stat-number">{{ counts.records }}</p>
+                <span class="stat-trend">Documented cases</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-secondary">
+        <div class="clean-panel recent-appointments">
+            <div class="panel-header">
+                <h2>Upcoming Appointments</h2>
+                <a href="{{ url_for('appointments') }}" class="btn outline sm">View All</a>
+            </div>
+            <div class="table-wrapper mini">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in recent_appointments %}
+                        <tr>
+                            <td><strong>{{ a.patient_name }}</strong></td>
+                            <td>{{ a.doctor_name }}</td>
+                            <td>{{ a.date }}</td>
+                            <td><span class="status-pill {{ a.status|lower }}">{{ a.status }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="empty">No appointments found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

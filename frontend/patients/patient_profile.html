@@ -1,0 +1,143 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 40px;
+        background: var(--card-bg);
+        padding: 32px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-inner);
+    }
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        background: var(--brand-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: var(--brand);
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+    .profile-info h1 { margin: 0 0 8px 0; font-size: 2rem; }
+    .profile-meta { display: flex; gap: 24px; color: var(--ink-soft); font-size: 0.95rem; }
+    
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+    }
+
+    .history-section h2 { margin-bottom: 24px; font-size: 1.25rem; display: flex; align-items: center; gap: 12px; }
+    .history-card {
+        padding: 24px;
+        border-left: 3px solid var(--brand-light);
+        background: var(--card-bg);
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-inner);
+        position: relative;
+    }
+    .history-card .date { font-size: 0.8rem; color: var(--ink-mute); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+    .history-card .diagnosis { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; display: block; color: var(--ink); }
+    .history-card .prescription { background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.6; border-left: 2px solid var(--line); }
+    .history-card .doctor { margin-top: 12px; font-size: 0.85rem; color: var(--ink-soft); font-style: italic; }
+
+    .sidebar-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+    .stat-box {
+        padding: 24px;
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-inner);
+    }
+    .stat-box h3 { margin-top: 0; font-size: 0.9rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+    .stat-list { list-style: none; padding: 0; margin: 0; }
+    .stat-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+    .stat-list li:last-child { border-bottom: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="header-row">
+        <a href="{{ url_for('patients') }}" class="btn outline sm">← Back to Patients</a>
+        <div class="action-buttons">
+            <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn primary sm">Edit Profile</a>
+        </div>
+    </div>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">{{ patient.name[0] }}</div>
+        <div class="profile-info">
+            <h1>{{ patient.name }}</h1>
+            <div class="profile-meta">
+                <span><strong>Age:</strong> {{ patient.age }}</span>
+                <span><strong>Gender:</strong> {{ patient.gender }}</span>
+                <span><strong>Phone:</strong> {{ patient.phone }}</span>
+            </div>
+            {% if patient.address %}
+            <p style="margin-top: 12px; color: var(--ink-soft); font-size: 0.9rem;">📍 {{ patient.address }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="profile-grid">
+        <!-- Main History -->
+        <div class="history-section">
+            <h2>📁 Medical Records</h2>
+            {% for r in records %}
+            <div class="history-card">
+                <div class="date">{{ r.date }}</div>
+                <span class="diagnosis">Diagnosis: {{ r.diagnosis }}</span>
+                {% if r.prescription %}
+                <div class="prescription">
+                    <strong>Prescription:</strong><br>
+                    {{ r.prescription }}
+                </div>
+                {% endif %}
+                <div class="doctor">Attended by {{ r.doctor_name }}</div>
+            </div>
+            {% else %}
+            <div class="clean-panel empty" style="text-align: center; padding: 48px; color: var(--ink-mute);">
+                No medical records found for this patient.
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sidebar Appointments -->
+        <div class="sidebar-stats">
+            <div class="stat-box">
+                <h3>Appointments</h3>
+                <ul class="stat-list">
+                    {% for a in appointments %}
+                    <li>
+                        <span>{{ a.date }}</span>
+                        <span class="status-pill {{ a.status|lower }}" style="font-size: 0.7rem; padding: 2px 6px;">{{ a.status }}</span>
+                    </li>
+                    {% else %}
+                    <li class="empty" style="color: var(--ink-mute);">No appointment history</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if patient.description %}
+            <div class="stat-box">
+                <h3>Notes</h3>
+                <p style="font-size: 0.9rem; line-height: 1.6; color: var(--ink-soft);">{{ patient.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

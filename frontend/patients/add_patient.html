@@ -1,0 +1,39 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='patients/patients.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Add Patient</h1>
+    <div class="clean-panel form-container">
+        <form class="form" method="POST">
+            <label>Name</label>
+            <input type="text" name="name" required>
+
+            <label>Age</label>
+            <input type="number" name="age" min="0" required>
+
+            <label>Gender</label>
+            <select name="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Phone</label>
+            <input type="text" name="phone">
+
+            <label>Address</label>
+            <textarea name="address" rows="3"></textarea>
+
+            <label>Description / About Patient</label>
+            <textarea name="description" rows="3" placeholder="Enter relevant medical history, lifestyle details, or any other notes..."></textarea>
+
+            <button class="btn" type="submit">Save Patient</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+/* appointments.css */
+.form-container {
+	max-width: 680px;
+	margin: 16px auto 0;
+}
+
+.action-buttons {
+	white-space: nowrap;
+}
+
+.status-toggle {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.status-btn {
+	flex: 1;
+	cursor: pointer;
+}
+
+.status-btn input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.status-btn span {
+	display: block;
+	text-align: center;
+	padding: 10px 16px;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--line);
+	background: var(--bg-app);
+	color: var(--ink-soft);
+	font-size: 0.9rem;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.status-btn input[type="radio"]:checked + span {
+	border-color: var(--brand);
+	background: var(--brand);
+	color: #fff;
+}
+
+.status-btn:hover span {
+	border-color: var(--ink-soft);
+	color: var(--ink);
+}
+
+@media (max-width: 768px) {
+	.status-toggle {
+		flex-direction: column;
+	}
+}

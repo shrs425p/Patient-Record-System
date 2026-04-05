@@ -1,0 +1,58 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='appointments/appointments.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Edit Appointment: #{{ appointment.id }}</h1>
+    <div class="clean-panel form-container">
+        <form class="form" method="POST">
+            <label>Patient</label>
+            <select name="patient_id" required>
+                <option value="" disabled>Select a patient</option>
+                {% for p in patients %}
+                <option value="{{ p.id }}" {% if appointment.patient_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Doctor</label>
+            <select name="doctor_id" required>
+                <option value="" disabled>Select a doctor</option>
+                {% for d in doctors %}
+                <option value="{{ d.id }}" {% if appointment.doctor_id == d.id %}selected{% endif %}>{{ d.name }} - {{ d.specialty }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Date</label>
+            <input type="date" name="date" value="{{ appointment.date }}" required>
+
+            <label>Reason</label>
+            <input type="text" name="reason" value="{{ appointment.reason or '' }}">
+
+            <label>Status</label>
+            {% if appointment.status == 'Completed' %}
+            <p style="font-size: 0.8rem; color: var(--ink-mute); margin-bottom: 8px;">⚠️ Completed appointments cannot be cancelled.</p>
+            {% endif %}
+            <div class="status-toggle">
+                <label class="status-btn">
+                    <input type="radio" name="status" value="Scheduled" {% if appointment.status == 'Scheduled' or not appointment.status %}checked{% endif %} {% if appointment.status == 'Completed' %}disabled{% endif %}>
+                    <span>Scheduled</span>
+                </label>
+                <label class="status-btn">
+                    <input type="radio" name="status" value="Completed" {% if appointment.status == 'Completed' %}checked{% endif %}>
+                    <span>Completed</span>
+                </label>
+                <label class="status-btn" {% if appointment.status == 'Completed' %}title="Cannot cancel a completed appointment"{% endif %}>
+                    <input type="radio" name="status" value="Cancelled" {% if appointment.status == 'Cancelled' %}checked{% endif %} {% if appointment.status == 'Completed' %}disabled{% endif %}>
+                    <span style="{% if appointment.status == 'Completed' %}opacity:0.35; cursor:not-allowed;{% endif %}">Cancelled</span>
+                </label>
+            </div>
+
+            <button class="btn" type="submit">Update Appointment</button>
+            <a href="{{ url_for('appointments') }}" class="btn secondary" style="width:100%; margin-top: 10px; text-align:center; display:block;">Cancel</a>
+        </form>
+    </div>
+</section>
+{% endblock %}

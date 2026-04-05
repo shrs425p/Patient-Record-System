@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title if title else 'Patient Record System' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global/global.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-wrapper {% if not session.get('logged_in') %}public-layout{% endif %}">
+        
+        {% if session.get('logged_in') %}
+        <aside class="sidebar">
+            <a href="{{ url_for('landing') }}" class="brand" aria-label="Go to home page">
+                <div class="logo-icon"></div>
+                <h2>Clinic</h2>
+            </a>
+            
+            <nav class="nav-links">
+                <div class="nav-section">
+                    <span class="nav-label">Menu</span>
+                    <a href="{{ url_for('dashboard') }}" class="nav-item">Dashboard</a>
+                    <a href="{{ url_for('patients') }}" class="nav-item">Patients {% if patient_count > 0 %}<span class="badge">{{ patient_count }}</span>{% endif %}</a>
+                    <a href="{{ url_for('doctors') }}" class="nav-item">Doctors</a>
+                    <a href="{{ url_for('appointments') }}" class="nav-item">Appointments {% if appointment_today_count > 0 %}<span class="badge warning" title="Today's Appointments">{{ appointment_today_count }}</span>{% endif %}</a>
+                    <a href="{{ url_for('records') }}" class="nav-item">Records</a>
+                </div>
+            </nav>
+            
+            <div class="nav-footer">
+                <a href="{{ url_for('logout') }}" class="nav-item danger">Logout</a>
+            </div>
+        </aside>
+        {% endif %}
+        
+        <main class="main-content">
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">
+                                {{ message }}
+                                <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='global/global.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

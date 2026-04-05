@@ -1,0 +1,189 @@
+================================================================================
+       MYSQL COMMAND REFERENCE - PATIENT RECORD SYSTEM
+       Database: patient_record_system
+       Tables: patient, doctor, appointment, medical_record
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. DATABASE COMMANDS
+--------------------------------------------------------------------------------
+
+SHOW DATABASES;                          -- List all databases
+USE patient_record_system;               -- Switch to your DB
+SELECT DATABASE();                       -- Show current active DB
+DROP DATABASE patient_record_system;     -- Delete entire DB (DANGEROUS!)
+
+
+--------------------------------------------------------------------------------
+2. TABLE COMMANDS
+--------------------------------------------------------------------------------
+
+SHOW TABLES;                             -- List all tables in current DB
+
+DESCRIBE patient;                        -- Show columns of patient table
+DESCRIBE doctor;                         -- Show columns of doctor table
+DESCRIBE appointment;                    -- Show columns of appointment table
+DESCRIBE medical_record;                 -- Show columns of medical_record table
+
+SHOW COLUMNS FROM doctor;               -- Same as DESCRIBE doctor
+SHOW CREATE TABLE doctor;               -- Show full CREATE TABLE statement
+SHOW TABLE STATUS;                       -- Show info on all tables (size, rows, etc.)
+
+
+--------------------------------------------------------------------------------
+3. SELECT - READ DATA
+--------------------------------------------------------------------------------
+
+-- All rows from each table
+SELECT * FROM patient;
+SELECT * FROM doctor;
+SELECT * FROM appointment;
+SELECT * FROM medical_record;
+
+-- Specific columns only
+SELECT name, age, gender FROM patient;
+SELECT name, specialization FROM doctor;
+
+-- Limit rows shown
+SELECT * FROM patient LIMIT 1;
+SELECT * FROM patient LIMIT 5;
+
+-- Specific record by ID
+SELECT * FROM patient WHERE id = 1;
+SELECT * FROM doctor WHERE id = 3;
+
+-- Search by name (partial match)
+SELECT * FROM patient WHERE name LIKE '%Aarav%';
+SELECT * FROM doctor WHERE specialization = 'Cardiology';
+
+-- Count total rows
+SELECT COUNT(*) FROM patient;
+SELECT COUNT(*) FROM doctor;
+SELECT COUNT(*) FROM appointment;
+SELECT COUNT(*) FROM medical_record;
+
+-- Sort results
+SELECT * FROM patient ORDER BY name ASC;
+SELECT * FROM appointment ORDER BY date DESC;
+
+
+--------------------------------------------------------------------------------
+4. JOIN QUERIES - MULTIPLE TABLES
+--------------------------------------------------------------------------------
+
+-- Appointments with Patient & Doctor names
+SELECT a.id, p.name AS patient, d.name AS doctor, a.date, a.reason
+FROM appointment a
+JOIN patient p ON a.patient_id = p.id
+JOIN doctor d ON a.doctor_id = d.id;
+
+-- Medical Records with full details
+SELECT mr.id, p.name AS patient, d.name AS doctor,
+       a.date, mr.diagnosis, mr.prescription
+FROM medical_record mr
+JOIN appointment a ON mr.appointment_id = a.id
+JOIN patient p ON a.patient_id = p.id
+JOIN doctor d ON a.doctor_id = d.id;
+
+-- Appointments WITHOUT a medical record yet
+SELECT a.id, p.name AS patient, a.date
+FROM appointment a
+JOIN patient p ON a.patient_id = p.id
+LEFT JOIN medical_record mr ON mr.appointment_id = a.id
+WHERE mr.id IS NULL;
+
+
+--------------------------------------------------------------------------------
+5. INSERT - ADD DATA
+--------------------------------------------------------------------------------
+
+INSERT INTO patient (name, age, gender, phone, address)
+VALUES ('Ravi Kumar', 30, 'Male', '9876543000', '12 MG Road, Delhi');
+
+INSERT INTO doctor (name, specialization, phone)
+VALUES ('Dr. Anjali Singh', 'Neurology', '9123456000');
+
+INSERT INTO appointment (patient_id, doctor_id, date, reason)
+VALUES (1, 2, '2026-05-01', 'Headache');
+
+INSERT INTO medical_record (appointment_id, diagnosis, prescription)
+VALUES (1, 'Migraine', 'Sumatriptan 50mg');
+
+
+--------------------------------------------------------------------------------
+6. UPDATE - EDIT DATA
+--------------------------------------------------------------------------------
+
+UPDATE patient SET phone = '9999999999' WHERE id = 1;
+UPDATE patient SET address = 'Mumbai' WHERE id = 2;
+
+UPDATE doctor SET specialization = 'General Medicine' WHERE id = 2;
+UPDATE doctor SET phone = '9000000000' WHERE id = 1;
+
+UPDATE appointment SET reason = 'Follow-up checkup' WHERE id = 3;
+UPDATE appointment SET date = '2026-06-01' WHERE id = 1;
+
+UPDATE medical_record SET diagnosis = 'Typhoid' WHERE id = 1;
+UPDATE medical_record SET prescription = 'Paracetamol 500mg' WHERE id = 2;
+
+
+--------------------------------------------------------------------------------
+7. DELETE - REMOVE DATA
+--------------------------------------------------------------------------------
+
+-- Delete specific records
+DELETE FROM patient WHERE id = 1;
+DELETE FROM doctor WHERE id = 2;
+DELETE FROM appointment WHERE id = 3;
+DELETE FROM medical_record WHERE id = 1;
+
+-- Clear all rows from tables (in correct order to avoid FK errors)
+DELETE FROM medical_record;
+DELETE FROM appointment;
+DELETE FROM patient;
+DELETE FROM doctor;
+
+-- Reset auto-increment IDs back to 1
+ALTER TABLE medical_record AUTO_INCREMENT = 1;
+ALTER TABLE appointment AUTO_INCREMENT = 1;
+ALTER TABLE patient AUTO_INCREMENT = 1;
+ALTER TABLE doctor AUTO_INCREMENT = 1;
+
+
+--------------------------------------------------------------------------------
+8. AGGREGATE / SUMMARY QUERIES
+--------------------------------------------------------------------------------
+
+SELECT AVG(age) AS average_age FROM patient;
+SELECT MIN(age) AS youngest, MAX(age) AS oldest FROM patient;
+SELECT gender, COUNT(*) AS total FROM patient GROUP BY gender;
+
+-- Total appointments per doctor
+SELECT d.name AS doctor, COUNT(a.id) AS total_appointments
+FROM doctor d
+LEFT JOIN appointment a ON a.doctor_id = d.id
+GROUP BY d.name
+ORDER BY total_appointments DESC;
+
+
+--------------------------------------------------------------------------------
+9. USEFUL TIPS
+--------------------------------------------------------------------------------
+
+-- Always run this first after opening MySQL client:
+USE patient_record_system;
+
+-- Check foreign key constraints (important before deleting):
+-- Delete medical_record BEFORE appointment
+-- Delete appointment BEFORE patient or doctor
+
+-- To see index info on a table:
+SHOW INDEX FROM appointment;
+
+-- To see all running queries:
+SHOW PROCESSLIST;
+
+================================================================================
+END OF REFERENCE
+================================================================================

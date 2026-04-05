@@ -1,0 +1,54 @@
+{% extends 'global/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='appointments/appointments.css') }}">
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Book Appointment</h1>
+    <div class="clean-panel form-container">
+        <form class="form" method="POST">
+            <label style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span>Patient</span>
+                <a href="{{ url_for('add_patient') }}" style="font-size: 0.75rem; color: var(--ink-soft); text-decoration: none; font-weight: 600;">+ New Patient</a>
+            </label>
+            <select name="patient_id" required>
+                <option value="">Select patient</option>
+                {% for p in patients %}
+                <option value="{{ p.id }}">{{ p.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Doctor</label>
+            <select name="doctor_id" required>
+                <option value="">Select doctor</option>
+                {% for d in doctors %}
+                <option value="{{ d.id }}">{{ d.name }} - {{ d.specialty }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Date & Time</label>
+            <input type="datetime-local" name="date" required>
+
+            <label>Status</label>
+            <div class="status-toggle">
+                <label class="status-btn">
+                    <input type="radio" name="status" value="Scheduled" checked>
+                    <span>Scheduled</span>
+                </label>
+                <label class="status-btn">
+                    <input type="radio" name="status" value="Completed">
+                    <span>Completed</span>
+                </label>
+                <label class="status-btn">
+                    <input type="radio" name="status" value="Cancelled">
+                    <span>Cancelled</span>
+                </label>
+            </div>
+
+            <button class="btn" type="submit">Save Appointment</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
