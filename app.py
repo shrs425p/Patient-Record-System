@@ -2,6 +2,7 @@ from flask import Flask
 from pathlib import Path
 import os
 
+from backend.auth import initialize_auth_storage
 from backend.routes.appointment_routes import register_appointment_routes
 from backend.routes.auth_routes import register_auth_routes
 from backend.routes.core_routes import register_core_routes
@@ -19,6 +20,8 @@ app = Flask(
     static_folder=str(FRONTEND_DIR),
 )
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "patient-record-secret")
+
+initialize_auth_storage()
 
 
 @app.context_processor
