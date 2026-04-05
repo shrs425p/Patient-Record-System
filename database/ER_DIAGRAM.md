@@ -41,7 +41,7 @@ erDiagram
 
     MEDICAL_RECORD {
         INT id PK
-        INT appointment_id FK UK "NOT NULL, UNIQUE"
+        INT appointment_id FK, UK "NOT NULL, UNIQUE"
         VARCHAR diagnosis "NOT NULL"
         TEXT prescription
     }
