@@ -1,10 +1,11 @@
 import mysql.connector
+import os
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "shrs",
-    "database": "patient_record_system",
+    "host": os.getenv("DB_HOST", "localhost"),
+    "user": os.getenv("DB_USER", "root"),
+    "password": os.getenv("DB_PASSWORD", "shrs"),
+    "database": os.getenv("DB_NAME", "patient_record_system"),
 }
 
 

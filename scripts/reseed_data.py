@@ -1,14 +1,15 @@
 import random
 from datetime import date, timedelta
+from pathlib import Path
+import sys
 
 import mysql.connector
 
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "shrs",
-    "database": "patient_record_system",
-}
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from backend.db import DB_CONFIG
 
 random.seed(42)
 

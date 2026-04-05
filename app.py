@@ -1,4 +1,6 @@
 from flask import Flask
+from pathlib import Path
+import os
 
 from backend.routes.appointment_routes import register_appointment_routes
 from backend.routes.auth_routes import register_auth_routes
@@ -8,8 +10,15 @@ from backend.routes.patient_routes import register_patient_routes
 from backend.routes.record_routes import register_record_routes
 from backend.services.sidebar_service import get_sidebar_stats
 
-app = Flask(__name__, template_folder="frontend", static_folder="frontend")
-app.secret_key = "patient-record-secret"
+BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIR = BASE_DIR / "frontend"
+
+app = Flask(
+    __name__,
+    template_folder=str(FRONTEND_DIR),
+    static_folder=str(FRONTEND_DIR),
+)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "patient-record-secret")
 
 
 @app.context_processor
@@ -29,4 +38,5 @@ register_appointment_routes(app)
 register_record_routes(app)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    debug_mode = os.getenv("FLASK_DEBUG", "true").lower() in {"1", "true", "yes", "on"}
+    app.run(debug=debug_mode)
