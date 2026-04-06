@@ -105,7 +105,7 @@ def build_appointments(count=60, patient_count=40, doctor_count=32):
         if i < 40:
             status = "Completed"
         elif i < 52:
-            status = "Scheduled"
+            status = "Pending"
         else:
             status = "Cancelled"
         appointments.append((patient_id, doctor_id, appt_date, reason, status))

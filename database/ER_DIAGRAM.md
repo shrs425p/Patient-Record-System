@@ -36,7 +36,7 @@ erDiagram
         INT doctor_id FK "NOT NULL"
         DATE date "NOT NULL"
         VARCHAR reason
-        ENUM status "Scheduled | Completed | Cancelled"
+        ENUM status "Pending | Completed | Cancelled"
     }
 
     MEDICAL_RECORD {

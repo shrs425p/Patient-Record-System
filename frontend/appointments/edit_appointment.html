@@ -37,8 +37,8 @@
             {% endif %}
             <div class="status-toggle">
                 <label class="status-btn">
-                    <input type="radio" name="status" value="Scheduled" {% if appointment.status == 'Scheduled' or not appointment.status %}checked{% endif %} {% if appointment.status == 'Completed' %}disabled{% endif %}>
-                    <span>Scheduled</span>
+                    <input type="radio" name="status" value="Pending" {% if appointment.status == 'Pending' or appointment.status == 'Scheduled' or not appointment.status %}checked{% endif %} {% if appointment.status == 'Completed' or appointment.status == 'Cancelled' %}disabled{% endif %}>
+                    <span>Pending</span>
                 </label>
                 <label class="status-btn">
                     <input type="radio" name="status" value="Completed" {% if appointment.status == 'Completed' %}checked{% endif %}>

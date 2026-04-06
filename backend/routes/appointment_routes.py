@@ -69,7 +69,7 @@ def register_appointment_routes(app):
                 doctor_id = request.form.get("doctor_id")
                 date_value = request.form.get("date")
                 reason = request.form.get("reason", "").strip()
-                new_status = request.form.get("status", "Scheduled")
+                new_status = request.form.get("status", "Pending")
 
                 if not patient_id or not doctor_id or not date_value:
                     flash("Patient, Doctor, and Date are required.", "error")
@@ -77,9 +77,12 @@ def register_appointment_routes(app):
 
                 if new_status == "Cancelled":
                     current = get_appointment_by_id(appointment_id)
-                    if current and current["status"] != "Scheduled":
+                    current_status = current.get("raw_status") if current else None
+                    if current_status == "Pending":
+                        current_status = "Scheduled"
+                    if current and current_status not in {"Scheduled", "Pending"}:
                         flash(
-                            f"Cannot cancel an appointment that is already '{current['status']}'. Only Scheduled appointments can be cancelled.",
+                            f"Cannot cancel an appointment that is already '{current['status']}'. Only Pending appointments can be cancelled.",
                             "error",
                         )
                         return redirect(url_for("edit_appointment", appointment_id=appointment_id))

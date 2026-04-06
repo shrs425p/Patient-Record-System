@@ -30,7 +30,7 @@ class Appointment:
     doctor_id: int
     date: str
     reason: Optional[str] = None
-    status: str = "Scheduled"
+    status: str = "Pending"
 
 
 @dataclass

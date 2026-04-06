@@ -61,7 +61,15 @@ def get_patient_profile_data(patient_id):
 
             cursor.execute(
                 """
-                SELECT a.id, a.date, a.reason, a.status, d.name as doctor_name
+                SELECT a.id,
+                       a.date,
+                       a.reason,
+                       CASE
+                           WHEN a.status = 'Completed' THEN 'Completed'
+                           WHEN a.status = 'Cancelled' OR a.date < CURDATE() THEN 'Cancelled'
+                           ELSE 'Pending'
+                       END AS status,
+                       d.name as doctor_name
                 FROM appointment a
                 JOIN doctor d ON a.doctor_id = d.id
                 WHERE a.patient_id = %s

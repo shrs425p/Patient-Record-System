@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS appointment (
     doctor_id INT NOT NULL,
     date DATE NOT NULL,
     reason VARCHAR(255),
-    status ENUM('Scheduled', 'Completed', 'Cancelled') DEFAULT 'Scheduled',
+    status ENUM('Pending', 'Completed', 'Cancelled') DEFAULT 'Pending',
     CONSTRAINT fk_appointment_patient
         FOREIGN KEY (patient_id) REFERENCES patient(id)
         ON DELETE CASCADE,

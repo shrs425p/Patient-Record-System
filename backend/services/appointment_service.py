@@ -9,7 +9,12 @@ def list_appointments():
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT a.id, a.date, a.reason, a.status,
+            SELECT a.id, a.date, a.reason,
+                   CASE
+                       WHEN a.status = 'Completed' THEN 'Completed'
+                       WHEN a.status = 'Cancelled' OR a.date < CURDATE() THEN 'Cancelled'
+                       ELSE 'Pending'
+                   END AS status,
                    p.name AS patient_name,
                    d.name AS doctor_name,
                    d.specialty
@@ -63,7 +68,20 @@ def get_appointment_by_id(appointment_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM appointment WHERE id = %s", (appointment_id,))
+        cursor.execute(
+            """
+            SELECT a.*,
+                   a.status AS raw_status,
+                   CASE
+                       WHEN a.status = 'Completed' THEN 'Completed'
+                       WHEN a.status = 'Cancelled' OR a.date < CURDATE() THEN 'Cancelled'
+                       ELSE 'Pending'
+                   END AS status
+            FROM appointment a
+            WHERE a.id = %s
+            """,
+            (appointment_id,),
+        )
         return cursor.fetchone()
     finally:
         if cursor:
@@ -96,9 +114,13 @@ def update_appointment(appointment_id, patient_id, doctor_id, date_value, reason
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        # Keep DB compatibility: legacy enum may still store 'Scheduled'.
+        db_status = "Scheduled" if status == "Pending" else status
+
         cursor.execute(
             "UPDATE appointment SET patient_id=%s, doctor_id=%s, date=%s, reason=%s, status=%s WHERE id=%s",
-            (patient_id, doctor_id, date_value, reason, status, appointment_id),
+            (patient_id, doctor_id, date_value, reason, db_status, appointment_id),
         )
         conn.commit()
     finally:

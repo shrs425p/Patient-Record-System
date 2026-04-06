@@ -28,11 +28,19 @@ def get_dashboard_data():
 
         cursor.execute(
             """
-            SELECT a.id, p.name as patient_name, d.name as doctor_name, a.date, a.status
+            SELECT a.id,
+                   p.name as patient_name,
+                   d.name as doctor_name,
+                   a.date,
+                   CASE
+                       WHEN a.status = 'Completed' THEN 'Completed'
+                       WHEN a.status = 'Cancelled' OR a.date < CURDATE() THEN 'Cancelled'
+                       ELSE 'Pending'
+                   END AS status
             FROM appointment a
             JOIN patient p ON a.patient_id = p.id
             JOIN doctor d ON a.doctor_id = d.id
-            WHERE a.status = 'Scheduled'
+            WHERE a.date >= CURDATE() AND a.status NOT IN ('Completed', 'Cancelled')
             ORDER BY a.date ASC
             LIMIT 5
             """

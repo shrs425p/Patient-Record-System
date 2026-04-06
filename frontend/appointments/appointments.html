@@ -17,7 +17,7 @@
 
     <!-- Filter Tabs -->
     <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="Scheduled">Scheduled</button>
+        <button class="filter-tab active" data-filter="Pending">Pending</button>
         <button class="filter-tab" data-filter="Completed">Completed</button>
         <button class="filter-tab" data-filter="Cancelled">Cancelled</button>
         <button class="filter-tab" data-filter="all">All</button>
@@ -38,14 +38,14 @@
             </thead>
             <tbody>
                 {% for a in appointments %}
-                <tr data-status="{{ a.status or 'Scheduled' }}">
+                <tr data-status="{{ a.status or 'Pending' }}">
                     <td>{{ a.id }}</td>
                     <td>{{ a.patient_name }}</td>
                     <td>{{ a.doctor_name }}</td>
                     <td>{{ a.date }}</td>
                     <td>{{ a.reason or '-' }}</td>
                     <td>
-                        {% set s = a.status or 'Scheduled' %}
+                        {% set s = a.status or 'Pending' %}
                         <span class="status-badge status-{{ s | lower }}">{{ s }}</span>
                     </td>
                     <td class="action-buttons">
@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Default: show only Scheduled
-    filterTable('Scheduled');
+    // Default: show only Pending
+    filterTable('Pending');
 });
 </script>
 {% endblock %}

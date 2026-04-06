@@ -394,6 +394,7 @@ tr:hover { background-color: rgba(0, 0, 0, 0.015); }
     letter-spacing: 0.03em;
     text-transform: uppercase;
 }
+.status-badge.status-pending,
 .status-badge.status-scheduled { background: #EBF8FF; color: #2B6CB0; }
 .status-badge.status-completed { background: var(--accent-green); color: var(--accent-green-text); }
 .status-badge.status-cancelled { background: #FFF5F5; color: #C53030; }
