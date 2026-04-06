@@ -1,19 +1,27 @@
 # Flowchart / Block Diagram - Patient Record System
 
-## 1) High-Level Block Diagram
+## 1) Tiered Architectural Diagram
 
 ```mermaid
-flowchart LR
-    U[User Browser] --> V[Frontend Templates HTML CSS JS]
-    V --> R[Flask Route Layer backend routes]
-    R --> S[Service Layer backend services]
-    S --> D[DB Layer backend db py]
-    D --> M[(MySQL Database)]
+flowchart TB
+    subgraph Client Tier
+        U[User Browser] --> V[Frontend Templates]
+    end
 
-    A[Auth Module backend auth py] --> R
-    A --> M
+    subgraph Logic Tier
+        V --> R[Flask Route Layer]
+        R --> S[Service Layer]
+    end
 
-    Z[Reseed Script scripts reseed data py] --> M
+    subgraph Data Tier
+        S --> D[DB Layer]
+        D --> M[(MySQL Database)]
+    end
+
+    subgraph Auth Module
+        A[Auth Backend] -.-> R
+        A -.-> M
+    end
 ```
 
 ## 2) Application Flowchart

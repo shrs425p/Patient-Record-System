@@ -46,7 +46,11 @@
                 </label>
                 <label class="status-btn" {% if appointment.status == 'Completed' %}title="Cannot cancel a completed appointment"{% endif %}>
                     <input type="radio" name="status" value="Cancelled" {% if appointment.status == 'Cancelled' %}checked{% endif %} {% if appointment.status == 'Completed' %}disabled{% endif %}>
-                    <span style="{% if appointment.status == 'Completed' %}opacity:0.35; cursor:not-allowed;{% endif %}">Cancelled</span>
+                    {% if appointment.status == 'Completed' %}
+                    <span style="opacity:0.35; cursor:not-allowed;">Cancelled</span>
+                    {% else %}
+                    <span>Cancelled</span>
+                    {% endif %}
                 </label>
             </div>
 
