@@ -291,11 +291,39 @@ input:focus, select:focus, textarea:focus {
     transform: translateY(-5px); transition: all 0.2s ease;
 }
 .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
+.custom-search-wrap {
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    background: var(--card-bg);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+.custom-select-search {
+    width: 100%;
+    padding: 8px 10px;
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-app);
+    color: var(--ink);
+    font-size: 0.9rem;
+}
+.custom-select-search:focus {
+    outline: none;
+    border-color: var(--line-focus);
+    background: #fff;
+}
 .custom-option { padding: 10px 16px; cursor: pointer; transition: background 0.1s; color: var(--ink); font-size: 0.95rem; border-bottom: 1px solid var(--line); }
 .custom-option:last-child { border-bottom: none; }
 .custom-option:hover { background: var(--bg-app); }
 .custom-option.selected { font-weight: 600; background: var(--brand-light); color: var(--brand); }
 .custom-option.placeholder-option { color: var(--ink-soft); font-style: italic; }
+.custom-option-empty {
+    padding: 10px 16px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
 
 select { margin-bottom: 0 !important; } /* Prevents double spacing since wrapper provides it */
 

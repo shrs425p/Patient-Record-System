@@ -13,7 +13,7 @@
                 <span>Patient</span>
                 <a href="{{ url_for('add_patient') }}" style="font-size: 0.75rem; color: var(--ink-soft); text-decoration: none; font-weight: 600;">+ New Patient</a>
             </label>
-            <select name="patient_id" required>
+            <select name="patient_id" required data-searchable data-search-placeholder="Search patient name...">
                 <option value="">Select patient</option>
                 {% for p in patients %}
                 <option value="{{ p.id }}">{{ p.name }}</option>
