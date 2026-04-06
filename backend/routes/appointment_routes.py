@@ -42,13 +42,14 @@ def register_appointment_routes(app):
             doctor_id = request.form.get("doctor_id", "").strip()
             date_value = request.form.get("date", "").strip()
             reason = request.form.get("reason", "").strip()
+            status = request.form.get("status", "Pending").strip()
 
             if not patient_id or not doctor_id or not date_value:
                 flash("Patient, doctor, and date are required.", "error")
                 return redirect(url_for("add_appointment"))
 
             try:
-                create_appointment(patient_id, doctor_id, date_value, reason)
+                create_appointment(patient_id, doctor_id, date_value, reason, status)
                 flash("Appointment booked successfully.", "success")
                 return redirect(url_for("appointments"))
             except Error as err:

@@ -1,4 +1,5 @@
 from backend.db import get_db_connection
+from mysql.connector import Error
 
 
 def list_appointments():
@@ -90,16 +91,27 @@ def get_appointment_by_id(appointment_id):
             conn.close()
 
 
-def create_appointment(patient_id, doctor_id, date_value, reason):
+def create_appointment(patient_id, doctor_id, date_value, reason, status="Pending"):
     conn = None
     cursor = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO appointment (patient_id, doctor_id, date, reason) VALUES (%s, %s, %s, %s)",
-            (patient_id, doctor_id, date_value, reason),
-        )
+
+        try:
+            cursor.execute(
+                "INSERT INTO appointment (patient_id, doctor_id, date, reason, status) VALUES (%s, %s, %s, %s, %s)",
+                (patient_id, doctor_id, date_value, reason, status),
+            )
+        except Error:
+            if status == "Pending":
+                cursor.execute(
+                    "INSERT INTO appointment (patient_id, doctor_id, date, reason, status) VALUES (%s, %s, %s, %s, %s)",
+                    (patient_id, doctor_id, date_value, reason, "Scheduled"),
+                )
+            else:
+                raise
+
         conn.commit()
     finally:
         if cursor:
@@ -115,13 +127,20 @@ def update_appointment(appointment_id, patient_id, doctor_id, date_value, reason
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Keep DB compatibility: legacy enum may still store 'Scheduled'.
-        db_status = "Scheduled" if status == "Pending" else status
+        try:
+            cursor.execute(
+                "UPDATE appointment SET patient_id=%s, doctor_id=%s, date=%s, reason=%s, status=%s WHERE id=%s",
+                (patient_id, doctor_id, date_value, reason, status, appointment_id),
+            )
+        except Error:
+            if status == "Pending":
+                cursor.execute(
+                    "UPDATE appointment SET patient_id=%s, doctor_id=%s, date=%s, reason=%s, status=%s WHERE id=%s",
+                    (patient_id, doctor_id, date_value, reason, "Scheduled", appointment_id),
+                )
+            else:
+                raise
 
-        cursor.execute(
-            "UPDATE appointment SET patient_id=%s, doctor_id=%s, date=%s, reason=%s, status=%s WHERE id=%s",
-            (patient_id, doctor_id, date_value, reason, db_status, appointment_id),
-        )
         conn.commit()
     finally:
         if cursor:
